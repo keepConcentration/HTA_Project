@@ -20,32 +20,32 @@ import com.passtoss.myhome.mybatis.mapper.MemberMapper;
 public class MemberServiceImpl implements MemberService {
 	private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
-	private MemberMapper dao;
+	private final MemberMapper memberMapper;
 
 	@Autowired
-	public MemberServiceImpl(MemberMapper dao) {
-		this.dao = dao;
+	public MemberServiceImpl(MemberMapper memberMapper) {
+		this.memberMapper = memberMapper;
 	}
 
 	@Override
 	public int isId(String id) {
-		Member member = dao.isId(id);
+		Member member = memberMapper.isId(id);
 		return (member == null) ? -1 : 1;
 	}
 
 	@Override
 	public int mailAuth(Map<String, String> map) {
-		MailAuth mailauth = dao.isMailAuth(map);
+		MailAuth mailauth = memberMapper.isMailAuth(map);
 		if (mailauth == null) {
-			return dao.insertMailAuth(map);
+			return memberMapper.insertMailAuth(map);
 		} else {
-			return dao.updateMailAuth(map);
+			return memberMapper.updateMailAuth(map);
 		}
 	}
 
 	@Override
 	public int mailCertify(Map<String, String> map) {
-		MailAuth mailauth = dao.isMailAuth(map);
+		MailAuth mailauth = memberMapper.isMailAuth(map);
 		String originalNum = mailauth.getAuthNum();
 		Date sendTime = mailauth.getSendTime();
 		Date now = new Date();
@@ -76,27 +76,27 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Member memberInfo(String id) {
-		return dao.isId(id);
+		return memberMapper.isId(id);
 	}
 
 	@Override
 	public int checkURL(String url) {
-		Company c = dao.checkURL(url);
+		Company c = memberMapper.checkURL(url);
 		return (c == null) ? 0 : 1;
 	}
 
 	@Override
 	public Company isCompany(String url) {
-		return dao.checkURL(url);		
+		return memberMapper.checkURL(url);
 	}
 
 	@Override
 	@Transactional
 	public int createCompany(Company c, Member m) {
-		int result = dao.createCompany(c);
+		int result = memberMapper.createCompany(c);
 		logger.info("회사 테이블 결과 : " + result);
 		if (result == 1) {
-			result = dao.insertUser(m);
+			result = memberMapper.insertUser(m);
 			logger.info("멤버 테이블 결과 : " + result);
 		}
 
@@ -106,8 +106,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Map<String, Integer> joinCompany(Member m) {
 		logger.info("insert 전 belong 값 : "+m.getAccess_option());
-		Map<String, Integer> map=new HashMap<String, Integer>();
-		int result = dao.insertUser(m);
+		Map<String, Integer> map= new HashMap<>();
+		int result = memberMapper.insertUser(m);
 		logger.info("insert 후 belong 값 : "+m.getAccess_option());
 		map.put("result", result);
 		map.put("belong", m.getAccess_option());
@@ -116,12 +116,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int resetPassword(String id, String password) {
-		return dao.resetPassword(id,password);
+		return memberMapper.resetPassword(id,password);
 	}
 
 	@Override
 	public List<Map<String, Object>> getSearchMemberList(String searchword,List<String> persons) {
-		return dao.getSearchMemberList(searchword, persons);
+		return memberMapper.getSearchMemberList(searchword, persons);
 	}
 
 	@Override
@@ -131,12 +131,12 @@ public class MemberServiceImpl implements MemberService {
 		}else if(m.getUpdateType().equals("member")) {
 			logger.info("내 정보 변경");
 		}
-		return dao.updateProfile(m);
+		return memberMapper.updateProfile(m);
 	}
 
 	@Override
 	public List<Object> getCompanyAllID(int companyId) {
-		return dao.getCompanyAllID(companyId);
+		return memberMapper.getCompanyAllID(companyId);
 	}
 
 }

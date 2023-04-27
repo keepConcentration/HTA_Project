@@ -8,34 +8,36 @@ import org.apache.ibatis.annotations.Mapper;
 import com.passtoss.myhome.domain.Company;
 import com.passtoss.myhome.domain.MailAuth;
 import com.passtoss.myhome.domain.Member;
+import org.springframework.stereotype.Component;
 
 @Mapper
+@Component
 public interface MemberMapper {
 
-	public Member isId(String id);
+	Member isId(String id);
 	
-	public MailAuth isMailAuth(Map<String, String> map);
+	MailAuth isMailAuth(Map<String, String> map);
 	
-	public int insertMailAuth(Map<String, String> map);	
+	int insertMailAuth(Map<String, String> map);
 
-	public int updateMailAuth(Map<String, String> map);
+	int updateMailAuth(Map<String, String> map);
 
-	public int createCompany(Company c);
+	int createCompany(Company c);
 
-	public int insertUser(Member m);
+	int insertUser(Member m);
 
-	public Company checkURL(String url);
+	Company checkURL(String url);
 
-	public int resetPassword(String id, String password);
+	int resetPassword(String id, String password);
 
-	public List<Map<String, Object>> getSearchMemberList(String searchword, List<String> persons);
+	List<Map<String, Object>> getSearchMemberList(String searchword, List<String> persons);
 
-	public int updateProfileImg(String id, String newName);
+	int updateProfileImg(String id, String newName);
 
-	public int updateProfile(Member m);
+	int updateProfile(Member m);
 
-	public Company getCompanyInfo(int company_id);
+	Company getCompanyInfo(int company_id);
 
-	public List<Object> getCompanyAllID(int companyId);
+	List<Object> getCompanyAllID(int companyId);
 
 }
